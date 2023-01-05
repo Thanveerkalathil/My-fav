@@ -246,9 +246,31 @@
     max-width: 900px;
 }
 
-
-
 /*------footer-----*/
+
+
+/*-------dob gender errors------*/
+.reg_grid .input_error {
+    width: 300px;
+    position: absolute;
+    top: 70px;
+}
+.input_error_select_large
+{
+    left: -97%;
+    top: 14px !important;
+}
+/*-------dob gender errors------*/
+
+/*-------error and success-------*/
+.error_text{
+    color: #b94a48;
+}
+.success_text{
+    color: var(--green-color);
+}
+/*-------error and success-------*/
+
 
 /*-------media queries-----*/
 
@@ -268,6 +290,10 @@
     .reg_grid select,
     .reg_grid label {
         width: 110px;
+    }
+
+    .reg_grid .input_error {
+        width: 350px;
     }
 }
 

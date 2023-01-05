@@ -14,6 +14,7 @@ a {
   color: inherit;
 }
 :root {
+  --fave-color: #2AAA8A;
   --bg-primary: #fff;
   --bg-secondary: #f0f2f5;
   --bg-third: #e4e6eb;

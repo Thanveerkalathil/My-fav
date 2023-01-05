@@ -14,7 +14,7 @@ export default function RegisterInput({ placeholder, bottom, ...props }) {
   });
   const test1 = view3 && field.name === "first_name";
   const test2 = view3 && field.name === "last_name";
-
+  console.log(view2);
   return (
     <div className="input_wrap register_input_wrap">
       <input
