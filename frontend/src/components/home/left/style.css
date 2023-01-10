@@ -32,3 +32,28 @@
     margin-bottom: 4px;
     margin-right: 1px;
 }
+.col{
+    margin-left: 2px;
+    transform: translateY(-2px);
+}
+.con_1{
+    transform: translateY(-1px);
+}
+.col_2{
+    position: relative;
+    font-size: 12px;
+    color: var(--fave-color);
+    margin-left: 9px;
+    margin-top: 2px;
+    font-weight: normal;
+}
+.col_2::before{
+    content: "";
+    width: 7px;
+    height: 7px;
+    border-radius: 50%;
+    background: var(--fave-color );
+    position: absolute;
+    left: -10px;
+    bottom: 2px;
+}
