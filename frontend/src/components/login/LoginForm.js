@@ -21,7 +21,7 @@ export default function LoginForm({ setVisible }) {
   console.log(login);
   const handleLoginChange = (e) => {
     const { name, value } = e.target;
-    setLogin({ ...login, [name]: value });
+    setLogin((prev) => ({ ...prev, [name]: value }));
   };
   const loginValidation = Yup.object({
     email: Yup.string()
@@ -36,12 +36,12 @@ export default function LoginForm({ setVisible }) {
 
   const loginSubmit = async () => {
     try {
-      setLogin(true);
+      setLogin(true); //dout//
       const { data } = await api.post(`/login`, {
         email,
         password,
       });
-      dispatch({ type: "LOGIN", payload: data });
+      dispatch({ type: "LOGIN", payload: data }); //dout//
       Cookies.set("user", JSON.stringify(data));
       navigate("/");
     } catch (error) {
@@ -53,9 +53,12 @@ export default function LoginForm({ setVisible }) {
   return (
     <div className="login_wrap">
       <div className="login_1">
-        <img src="../../icons/facebook.svg" alt="" />
+        <img
+          src="https://res.cloudinary.com/dcqzgw55m/image/upload/v1672915497/My_fav_zz0a9j.svg"
+          alt=""
+        />
         <span>
-          Facebook helps you connect and share with the people in your life.
+          My#fav helps you connect and share with the people in your life.
         </span>
       </div>
       <div className="login_2">
@@ -86,7 +89,7 @@ export default function LoginForm({ setVisible }) {
                   onChange={handleLoginChange}
                   bottom
                 />
-                <button type="submit" className="blue_button">
+                <button type="submit" className="fav_button">
                   Log In
                 </button>
               </Form>
@@ -99,7 +102,7 @@ export default function LoginForm({ setVisible }) {
           {error && <div className="error_text">{error}</div>}
           <div className="sign-splitter"></div>
           <button
-            className="blue_button open_signup"
+            className="fav_button open_signup"
             onClick={() => setVisible(true)}
           >
             Create Account

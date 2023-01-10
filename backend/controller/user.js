@@ -17,7 +17,6 @@ exports.register = async (req, res) => {
       last_name,
       email,
       password,
-      username,
       bYear,
       bMonth,
       bDay,
@@ -57,7 +56,6 @@ exports.register = async (req, res) => {
 
     let tempUsername = first_name + last_name;
     let newUsername = await validateUsername(tempUsername);
-    // console.log(newUsername, 'blaaaaaaah')
     const user = await new User({
       first_name,
       last_name,

@@ -8,14 +8,13 @@ dotenv.config();
 
 const app = express();
 app.use(cors());
-app.use(express.urlencoded({extended:false}))
-app.use(bodyParser.json());
+app.use(express.urlencoded({ extended: false })); //parsing url query to javascript object
+app.use(bodyParser.json()); //change to js
 
-console.log(readdirSync("./routes"));
+console.log(readdirSync("./routes")); //
 
 //routes
 readdirSync("./routes").map((r) => app.use("/", require("./routes/" + r)));
-
 //database
 mongoose
   .connect(process.env.DATABASE_URL, {
@@ -25,6 +24,10 @@ mongoose
   .catch((error) => console.log("error connecting mongodb", error));
 
 const PORT = process.env.PORT || 8000;
-app.listen(PORT, () => {
-  console.log(`Server is running on port : ${PORT}...`);
+app.listen(PORT, (err) => {
+  if (err) {
+    console.log("Server connection error");
+  } else {
+    console.log(`Server is running on port : ${PORT}...`);
+  }
 });

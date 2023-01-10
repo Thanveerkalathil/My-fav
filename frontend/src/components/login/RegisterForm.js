@@ -209,7 +209,7 @@ export default function RegisterForm({setVisible}) {
                 from us and can opt out at any time.
               </div>
               <div className="reg_btn_wrapper">
-                <button className="blue_button open_signup">Sign Up</button>
+                <button className="fav_button open_signup">Sign Up</button>
               </div>
               <HashLoader color="#2AAA8A" loading={loading} size={30} />
               {error && <div className="error_text">{error}</div>}
