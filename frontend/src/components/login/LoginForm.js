@@ -41,7 +41,7 @@ export default function LoginForm({ setVisible }) {
         email,
         password,
       });
-      dispatch({ type: "LOGIN", payload: data }); //dout//
+      dispatch({ type: "LOGIN", payload: data }); 
       Cookies.set("user", JSON.stringify(data));
       navigate("/");
     } catch (error) {
@@ -96,7 +96,7 @@ export default function LoginForm({ setVisible }) {
             )}
           </Formik>
 
-          <Link to="/forgot" className="forgot_password">
+          <Link to="/reset" className="forgot_password">
             Forgotten Paassword?
           </Link>
           {error && <div className="error_text">{error}</div>}
