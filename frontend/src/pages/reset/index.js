@@ -15,13 +15,14 @@ export default function Reset() {
   const { user } = useSelector((state) => ({ ...state }));
   const dispatch = useDispatch();
   const navigate = useNavigate();
-  const [visible, setVisible] = useState(3);
+  const [visible, setVisible] = useState(0);
   const [email, setEmail] = useState("");
+  const [loading, setLoading] = useState(false);
   const [code, setCode] = useState("");
   const [password, setPassword] = useState("");
   const [conf_password, setConf_password] = useState("");
-
   const [error, setError] = useState("");
+  const [userInfos, setUserInfos] = useState("");
 
   const logout = () => {
     Cookies.set("user", "");
@@ -30,6 +31,7 @@ export default function Reset() {
     });
     navigate("/login");
   };
+  console.log(userInfos);
   return (
     <div className="reset">
       <div className="reset_header">
@@ -60,9 +62,17 @@ export default function Reset() {
 
       <div className="reset_wrap">
         {visible === 0 && (
-          <SearchAccount email={email} setEmail={setEmail} error={error} />
+          <SearchAccount
+            email={email}
+            setEmail={setEmail}
+            error={error}
+            setError={setError}
+            setLoading={setLoading}
+            setUserInfos={setUserInfos}
+            setVisible={setVisible}
+          />
         )}
-        {visible === 1 && <SendEmail user={user} />}
+        {visible === 1 && userInfos && <SendEmail userInfos={userInfos}/>}
         {visible === 2 && (
           <CodeVerification
             user={user}
@@ -71,12 +81,14 @@ export default function Reset() {
             error={error}
           />
         )}
-        {visible === 3 && <ChangePassword  
-        password={password}
-        conf_password={conf_password}
-        setPassword={setPassword}
-        setConf_password={setConf_password}
-        />}
+        {visible === 3 && (
+          <ChangePassword
+            password={password}
+            conf_password={conf_password}
+            setPassword={setPassword}
+            setConf_password={setConf_password}
+          />
+        )}
       </div>
       <Footer />
     </div>
