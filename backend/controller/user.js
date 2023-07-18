@@ -4,11 +4,12 @@ const {
   validateUsername,
 } = require("../helpers/validation");
 const User = require("../models/User");
+const Code = require("../models/Code");
 const jwt = require("jsonwebtoken");
 const bcrypt = require("bcrypt");
-const { generatorToken } = require("../helpers/token");
-const { sendVerificationEmail } = require("../helpers/mailer");
-
+const { generatorToken } = require("../helpers/tokens");
+const { sendVerificationEmail, sendResetCode } = require("../helpers/mailer");
+const generateCode = require("../helpers/generateCode");
 exports.register = async (req, res) => {
   try {
     console.log(req.body);
@@ -171,11 +172,11 @@ exports.sendVerification = async (req, res) => {
     res.status(500).json({ message: error.message });
   }
 };
-exports.  findUser = async (req, res) => {
+exports.findUser = async (req, res) => {
   try {
     const { email } = req.body;
     const user = await User.findOne({ email }).select("-password");
-    if(!user){
+    if (!user) {
       return res.status(400).json({
         message: "Account does not exists.",
       });
@@ -183,7 +184,26 @@ exports.  findUser = async (req, res) => {
     return res.status(200).json({
       email: user.email,
       picture: user.picture,
-    })
+    });
+  } catch (error) {
+    res.status(500).json({ message: error.message });
+  }
+};
+
+exports.sendResetPasswordCode = async (req, res) => {
+  try {
+    const { email } = req.body;
+    const user = await User.findOne({ email }).select("-password");
+    await Code.findOneAndRemove({ user: user._id });
+    const code = generateCode(5);
+    const savedCode = await new Code({
+      code,
+      user: user._id,
+    }).save();
+    sendResetCode(user.email, user.first_name, code);
+    return res.status(200).json({
+      message: "Email reset code has been sent to your email",
+    });
   } catch (error) {
     res.status(500).json({ message: error.message });
   }

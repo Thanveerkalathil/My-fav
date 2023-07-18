@@ -1,7 +1,30 @@
+import axios from "axios";
 import { Link } from "react-router-dom";
 
-export default function SendEmail({ user ,userInfos}) {
-
+export default function SendEmail({
+  email,
+  userInfos,
+  error,
+  setError,
+  setVisible,
+  setUserInfos,
+  loading,
+  setLoading,
+}) {
+  const sendEmail = async () => {
+    try {
+      setLoading(true);
+      await axios.post(
+        `${process.env.REACT_APP_BACKEND_URL}/sendResetPasswordCode`,
+        { email }
+      );
+      setError("");
+      setVisible(2);
+    } catch (error) {
+      setLoading(false);
+      setError(error.response.data.message);
+    }
+  };
   return (
     <div className="reset_form dynamic_height">
       <div className="reset_form_header">Reset Your Password</div>
@@ -19,18 +42,28 @@ export default function SendEmail({ user ,userInfos}) {
           </label>
         </div>
         <div className="reset_right">
-        <img src={userInfos.picture} alt="" />
+          <img src={userInfos.picture} alt="" />
           <span>{userInfos.email}</span>
           <span>Facebook user</span>
         </div>
-        <div className="reset_form_btns">
-          <Link to="/login" className="gray_btn">
-            Not You ?
-          </Link>
-          <button type="submit" className="fav_button">
-            Continue
-          </button>
+      </div>
+      {error && (
+        <div className="error_text" style={{ padding: "10px" }}>
+          {error}
         </div>
+      )}
+      <div className="reset_form_btns">
+        <Link to="/login" className="gray_btn">
+          Not You ?
+        </Link>
+        <button
+          onClick={() => {
+            sendEmail();
+          }}
+          className="fav_button"
+        >
+          Continue
+        </button>
       </div>
     </div>
   );
