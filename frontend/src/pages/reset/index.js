@@ -101,6 +101,11 @@ export default function Reset() {
             conf_password={conf_password}
             setPassword={setPassword}
             setConf_password={setConf_password}
+            error={error}
+            setError={setError}
+            setLoading={setLoading}
+            setVisible={setVisible}
+            userInfos={userInfos}
           />
         )}
       </div>
