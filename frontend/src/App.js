@@ -7,10 +7,13 @@ import Profile from "./pages/profile";
 import LoggedInRoutes from "./routes/LoggedInRoutes";
 import NotLoggedInRoutes from "./routes/NotLoggedInRoutes";
 import Reset from "./pages/reset";
+import CreatePostPopup from "./components/createPostPopup";
 function App() {
   const { user } = useSelector((state) => ({ ...state }));
+  console.log(user)
   return (
     <div>
+      <CreatePostPopup user={user} />
       <Routes>
         <Route element={<LoggedInRoutes />}>
           <Route path="/profile" element={<Profile />} exact />
