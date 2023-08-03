@@ -10,7 +10,7 @@ import Reset from "./pages/reset";
 import CreatePostPopup from "./components/createPostPopup";
 function App() {
   const { user } = useSelector((state) => ({ ...state }));
-  console.log(user)
+  console.log(user);
   return (
     <div>
       <CreatePostPopup user={user} />
