@@ -1,5 +1,6 @@
 const express = require("express");
 const cors = require("cors");
+const fileUpload = require("express-fileupload");
 const { readdirSync } = require("fs");
 const dotenv = require("dotenv");
 const mongoose = require("mongoose");
@@ -8,6 +9,11 @@ dotenv.config();
 
 const app = express();
 app.use(cors());
+app.use(
+  fileUpload({  
+    useTempFiles: true,
+  })
+);
 app.use(express.urlencoded({ extended: false })); //parsing url query to javascript object
 app.use(bodyParser.json()); //change to js
 
