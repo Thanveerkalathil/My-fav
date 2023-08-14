@@ -61,7 +61,7 @@ export default function EmojiPickerBackgrounds({
           onChange={(e) => setText(e.target.value)}
           style={{
             paddingTop: `${
-              background 
+              background
                 ? Math.abs(textRef.current.value.length * 0.1 - 32)
                 : "0"
             }%`,

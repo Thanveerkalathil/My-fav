@@ -8,16 +8,18 @@ import LoggedInRoutes from "./routes/LoggedInRoutes";
 import NotLoggedInRoutes from "./routes/NotLoggedInRoutes";
 import Reset from "./pages/reset";
 import CreatePostPopup from "./components/createPostPopup";
+import { useState } from "react";
 function App() {
   const { user } = useSelector((state) => ({ ...state }));
+  const [visible, setVisible] = useState(false);
   console.log(user);
   return (
     <div>
-      <CreatePostPopup user={user} />
+      {visible && <CreatePostPopup user={user} setVisible={setVisible} />}
       <Routes>
         <Route element={<LoggedInRoutes />}>
           <Route path="/profile" element={<Profile />} exact />
-          <Route path="/" element={<Home />} exact />
+          <Route path="/" element={<Home setVisible={setVisible} />} exact />
           <Route path="/activate/:token" element={<Activate />} exact />
         </Route>
         <Route element={<NotLoggedInRoutes />}>
