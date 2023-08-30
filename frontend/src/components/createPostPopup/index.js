@@ -9,6 +9,8 @@ import { createPost } from "../../functions/post";
 import PulseLoader from "react-spinners/PulseLoader";
 import { useDispatch } from "react-redux";
 import PostError from "./postError";
+import dataURItoBlob from "../../helpers/dataURItoBlob";
+import { uploadImages } from "../../functions/uploadImages";
 
 export default function CreatePostPopup({ user, setVisible }) {
   const dispatch = useDispatch();
@@ -42,12 +44,50 @@ export default function CreatePostPopup({ user, setVisible }) {
       } else {
         setError(response);
       }
+    } else if (images && images.length) {
+      setLoading(true);
+      const postImages = images.map((img) => {
+        return dataURItoBlob(img);
+      });
+      const path = `${user.username}/post Images`;
+      let formData = new FormData();
+      formData.append("path", path);
+      postImages.forEach((image) => {
+        formData.append("file", image);
+      });
+      const response = await uploadImages(formData, path, user.token);
+      await createPost(null, null, text, response, user.id, user.token);
+      setLoading(false);
+      setText("");
+      setImages("")
+      setVisible(false);
+    } else if (text) {
+      setLoading(true);
+      const response = await createPost(
+        null,
+        null,
+        text,
+        null,
+        user.id,
+        user.token
+      );
+      setLoading(false);
+
+      if (response === "ok") {
+        setBackground("");
+        setText("");
+        setVisible(false);
+      } else {
+        setError(response);
+      }
+    } else {
+      console.log("Nothing");
     }
   };
   return (
     <div className="blur">
       <div className="postBox" ref={popup}>
-        {error &&  <PostError error={error} setError={setError} />}
+        {error && <PostError error={error} setError={setError} />}
         <div className="box_header">
           <div
             className="small_circle"
