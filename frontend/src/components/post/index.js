@@ -2,7 +2,6 @@ import { Link } from "react-router-dom";
 import "./style.css";
 import Moment from "react-moment";
 import { Dots, Public } from "../../svg";
-
 export default function Post({ post }) {
   return (
     <div className="post">
