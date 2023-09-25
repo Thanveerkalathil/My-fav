@@ -1,10 +1,11 @@
 import { Link } from "react-router-dom";
+import CreateComment from "./CreateComment";
+import PostMenu from "./PostMenu";
+import { Dots, Public } from "../../svg";
 import "./style.css";
 import Moment from "react-moment";
-import { Dots, Public } from "../../svg";
 import ReactsPopup from "./ReactsPopup";
 import { useState } from "react";
-import CreateComment from "./CreateComment";
 export default function Post({ post, user }) {
   const [visible, setVisible] = useState(false);
 
@@ -117,8 +118,9 @@ export default function Post({ post, user }) {
       </div>
       <div className="comments_wrap">
         <div className="comments_order"></div>
-        <CreateComment user={user}/>
+        <CreateComment user={user} />
       </div>
+      <PostMenu userId={user.id} postUserId={post.user._id} imagesLength={post?.images?.length} />
     </div>
   );
 }
