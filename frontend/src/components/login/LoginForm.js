@@ -54,7 +54,7 @@ export default function LoginForm({ setVisible }) {
     <div className="login_wrap">
       <div className="login_1">
         <img
-          src="https://res.cloudinary.com/dcqzgw55m/image/upload/v1672915497/My_fav_zz0a9j.svg"
+          src="https://res.cloudinary.com/dcqzgw55m/image/upload/c_fit,h_40,w_312/v1695727408/logo/myf_dw8urp.svg"
           alt=""
         />
         <span>
