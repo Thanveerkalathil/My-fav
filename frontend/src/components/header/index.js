@@ -91,7 +91,7 @@ export default function Header({ page }) {
         <Link
           to="/profile"
           className={`profile_link hover1 ${
-            page === "profile" ? "active_link" : ""
+            page === "profile" ? "active_link" : "hover1"
           }`}
         >
           <img src={user?.picture} alt="" />

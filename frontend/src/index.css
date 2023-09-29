@@ -69,6 +69,9 @@ a {
   gap: 6px;
   cursor: pointer;
 }
+.fav_button .gray_btm span {
+  transform: translateY(-1px);
+}
 /*----Button----*/
 
 /*-----Hovers-----*/
