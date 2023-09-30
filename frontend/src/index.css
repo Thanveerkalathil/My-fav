@@ -14,7 +14,7 @@ a {
   color: inherit;
 }
 :root {
-  --fave-color: #2AAA8A;
+  --fave-color: #2aaa8a;
   --bg-primary: #fff;
   --bg-secondary: #f0f4f5;
   --bg-third: #e4ebe8;
@@ -37,15 +37,15 @@ a {
   --shadow-inset: rgba(255, 255, 255, 0.5);
 }
 /*----Button----*/
-.fav_button{
+.fav_button {
   border: none;
-  outline:none;
+  outline: none;
   background: var(--fave-color);
   padding: 8.5px 12px;
   border-radius: 7px;
   font-family: inherit;
   font-weight: 600;
-  font-size: 14px;   
+  font-size: 14px;
   color: #fff;
   display: flex;
   align-items: center;
@@ -53,15 +53,31 @@ a {
   gap: 6px;
   cursor: pointer;
 }
-.gray_btn{
+.light_green_btn {
   border: none;
-  outline:none;
+  outline: none;
+  background: var(--light-green-color);
+  padding: 8.5px 12px;
+  border-radius: 7px;
+  font-family: inherit;
+  font-weight: 600;
+  font-size: 14px;
+  color: #fff;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  cursor: pointer;
+}
+.gray_btn {
+  border: none;
+  outline: none;
   background: var(--bg-secondary);
   padding: 8.5px 12px;
   border-radius: 7px;
   font-family: inherit;
   font-weight: 600;
-  font-size: 14px;   
+  font-size: 14px;
   color: #111;
   display: flex;
   align-items: center;
@@ -88,7 +104,7 @@ a {
 
 .blur {
   position: fixed;
-  top:0;
+  top: 0;
   left: 0;
   right: 0;
   bottom: 0;
@@ -96,7 +112,7 @@ a {
   z-index: 99;
 }
 
-.card{
+.card {
   height: 500px;
   width: 500px;
   background: red;
@@ -104,14 +120,35 @@ a {
 
 /*------Scrollbar---------*/
 
-.scrollbar::-webkit-scrollbar{
+.scrollbar::-webkit-scrollbar {
   width: 8px;
 }
-.scrollbar::-webkit-scrollbar-thumb{
+.scrollbar::-webkit-scrollbar-thumb {
   background-color: #aeafafa1;
   border-radius: 5px;
 }
 
-
 /*------Scrollbar---------*/
+/*---Circles------*/
+.small_circle {
+  position: relative;
+  height: 36px;
+  width: 36px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-right: 11px;
+  background: var(--bg-third);
+  cursor: pointer;
+}
+/*---Circles------*/
 
+/*----filters---*/
+.filter_green {
+  filter: invert(64%) sepia(57%) saturate(200%) saturate(200%) saturate(160%)
+    saturate(150%) saturate(150%) saturate(147.75%) hue-rotate(120deg)
+    brightness(75%) contrast(80%);
+}
+
+/*----filters---*/
