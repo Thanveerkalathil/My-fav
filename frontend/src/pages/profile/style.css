@@ -99,6 +99,7 @@
   border-radius: 50%;
   display: grid;
   place-items: center;
+  cursor: pointer;
 }
 .profile_name {
   display: flex;
@@ -262,8 +263,20 @@
   gap: 5px;
   color: var(--color-secondary);
 }
-.grid2 .active{
+.grid2 .active {
   color: var(--fave-color);
+}
+.othername {
+  color: var(--color-secondary);
+  font-size: 20px;
+}
+.no_posts {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: 700;
+  font-size: 20px;
+  color: var(--color-secondary);
 }
 /*--------Menu-------*/
 @media (max-width: 900px) {
@@ -286,6 +299,7 @@
   }
   .profile_name {
     padding-bottom: 10px;
+    flex-direction: column;
   }
   .pplumayknow {
     display: none;

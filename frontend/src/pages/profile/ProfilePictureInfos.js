@@ -1,4 +1,4 @@
-export default function ProfilePictureInfos({ profile }) {
+export default function ProfilePictureInfos({ profile, visitor }) {
   return (
     <div className="profile_img_wrap">
       <div className="profile_w_left">
@@ -10,29 +10,35 @@ export default function ProfilePictureInfos({ profile }) {
               backgroundImage: `url(${profile.picture})`,
             }}
           ></div>
-          <div className="profile_circle hover1">
-            <div className="camera_filled_icon"></div>
-          </div>
+          {!visitor && (
+            <div className="profile_circle hover1">
+              <div className="camera_filled_icon"></div>
+            </div>
+          )}
         </div>
         <div className="profile_w_col">
           <div className="profile_name">
             {profile.first_name} {profile.last_name}{" "}
-            <div className="othername">Othername</div>
+            <div className="othername">(Othername)</div>
           </div>
           <div className="profile_friend_count"></div>
           <div className="profile_friend_imgs"></div>
         </div>
       </div>
-      <div className="profile_w_right">
-        <div className="fav_button">
-          <img src="../../icons/plus.png" alt="" className="invert" />
-          <span>Add to story</span>
+      {visitor ? (
+        ""
+      ) : (
+        <div className="profile_w_right">
+          <div className="fav_button">
+            <img src="../../icons/plus.png" alt="" className="invert" />
+            <span>Add to story</span>
+          </div>
+          <div className="gray_btn">
+            <i className="edit_icon"></i>
+            <span>Edit Profile</span>
+          </div>
         </div>
-        <div className="gray_btn">
-          <i className="edit_icon"></i>
-          <span>Edit Profile</span>
-        </div>
-      </div>
+      )}
     </div>
   );
 }
