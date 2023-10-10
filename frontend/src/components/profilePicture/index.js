@@ -2,9 +2,12 @@ import { useRef, useState } from "react";
 import "./style.css";
 import UpdateProfilePicture from "./UpdateProfilePicture";
 import useOnClickOutside from "../../helpers/clickOutside";
-export default function ProfilePicture({ username, setShow, pRef }) {
+import { photosReducer } from "../../functions/reducers";
+import { useSelector } from "react-redux";
+export default function ProfilePicture({ username, setShow, pRef, photos }) {
   const popup = useRef(null);
-  useOnClickOutside(popup, () => setShow(false));
+  const { user } = useSelector((state) => ({ ...state }));
+  // useOnClickOutside(popup, () => setShow(false));
   const refInput = useRef(null);
   const [image, setImage] = useState("");
   const [error, setError] = useState("");
@@ -50,9 +53,8 @@ export default function ProfilePicture({ username, setShow, pRef }) {
             <button
               className="light_green_btn"
               onClick={() => refInput.current.click()}
-              accept="image/jpeg,image/png,image/webp,image/gif"
             >
-              <i className="plus_icon filter_green"></i>
+              <i className="plus_icon filter_blue"></i>
               Upload photo
             </button>
             <button className="gray_btn">
@@ -69,7 +71,38 @@ export default function ProfilePicture({ username, setShow, pRef }) {
             </button>
           </div>
         )}
-        <div className="old_pictures_wrap"></div>
+        <div className="old_pictures_wrap scrollbar">
+          <h4>your profile pictures</h4>
+          <div className="old_pictures">
+            {photos
+              .filter(
+                (img) => img.folder === `${user.username}/profile_pictures`
+              )
+              .map((photo) => (
+                <img
+                  src={photo.secure_url}
+                  key={photo.public_id}
+                  alt=""
+                  onClick={() => setImage(photo.secure_url)}
+                />
+              ))}
+          </div>
+          <h4>other pictures</h4>
+          <div className="old_pictures">
+            {photos
+              .filter(
+                (img) => img.folder !== `${user.username}/profile_pictures`
+              )
+              .map((photo) => (
+                <img
+                  src={photo.secure_url}
+                  key={photo.public_id}
+                  alt=""
+                  onClick={() => setImage(photo.secure_url)}
+                />
+              ))}
+          </div>
+        </div>
       </div>
       {image && (
         <UpdateProfilePicture
