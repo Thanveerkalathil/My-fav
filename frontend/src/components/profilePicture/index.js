@@ -1,7 +1,10 @@
 import { useRef, useState } from "react";
 import "./style.css";
 import UpdateProfilePicture from "./UpdateProfilePicture";
-export default function ProfilePicture() {
+import useOnClickOutside from "../../helpers/clickOutside";
+export default function ProfilePicture({ username, setShow, pRef }) {
+  const popup = useRef(null);
+  useOnClickOutside(popup, () => setShow(false));
   const refInput = useRef(null);
   const [image, setImage] = useState("");
   const [error, setError] = useState("");
@@ -28,10 +31,16 @@ export default function ProfilePicture() {
   };
   return (
     <div className="blur">
-      <input type="file" ref={refInput} hidden onChange={handleImage} />
-      <div className="postBox pictureBox">
+      <input
+        type="file"
+        ref={refInput}
+        hidden
+        onChange={handleImage}
+        accept="image/jpeg,image/png,image/webp,image/gif"
+      />
+      <div className="postBox pictureBox" ref={popup}>
         <div className="box_header">
-          <div className="small_circle">
+          <div className="small_circle" onClick={() => setShow(false)}>
             <i className="exit_icon"></i>
           </div>
           <span>Update profile picture</span>
@@ -66,7 +75,9 @@ export default function ProfilePicture() {
         <UpdateProfilePicture
           setImage={setImage}
           image={image}
+          setShow={setShow}
           setError={setError}
+          pRef={pRef}
         />
       )}
     </div>
