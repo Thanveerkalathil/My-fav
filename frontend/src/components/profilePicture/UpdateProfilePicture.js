@@ -35,6 +35,7 @@ export default function UpdateProfilePicture({
     slider.current.stepDown();
     setZoom(slider.current.value);
   };
+  
   const getCroppedImage = useCallback(
     async (show) => {
       try {

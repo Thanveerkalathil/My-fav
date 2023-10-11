@@ -737,7 +737,7 @@
   width: 16px;
   height: 16px;
   background-position: 0 -60px;
-} 
+}
 .error_icon {
   background-image: url(../../../src/icons/icons10.png);
   background-size: auto;
@@ -749,6 +749,15 @@
 .compact_icon {
   background-image: url(../../../src/icons/icons38.png);
   background-position: 0px -130px;
+  background-size: auto;
+  width: 20px;
+  height: 20px;
+  background-repeat: no-repeat;
+  display: inline-block;
+}
+.public_icon {
+  background-image: url(../../../public/icons/publicpack.png);
+  background-position: 0px -109px;
   background-size: auto;
   width: 20px;
   height: 20px;
