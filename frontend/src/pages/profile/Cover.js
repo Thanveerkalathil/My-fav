@@ -1,13 +1,21 @@
 import { useCallback, useEffect, useRef, useState } from "react";
 import useClickOutside from "../../helpers/clickOutside";
 import Cropper from "react-easy-crop";
+import { useSelector } from "react-redux";
 import getCroppedImg from "../../helpers/getCroppedImg";
+import { uploadImages } from "../../functions/uploadImages";
+import { updateCover } from "../../functions/user";
+import { createPost } from "../../functions/post";
+import PulseLoader from "react-spinners/PulseLoader";
 
 export default function Cover({ cover, visitor }) {
   const [showCoverMenu, setShowCoverMenu] = useState(false);
-  const [coverPicture, setCoverPicture] = useState(null);
+  const [coverPicture, setCoverPicture] = useState("");
+  const [loading, setLoading] = useState(false);
+  const { user } = useSelector((state) => ({ ...state }));
   const menuRef = useRef(null);
   const refInput = useRef(null);
+  const cRef = useRef(null);
   useClickOutside(menuRef, () => {
     setShowCoverMenu(false);
   });
@@ -64,6 +72,46 @@ export default function Cover({ cover, visitor }) {
     setWidth(coverRef.current.clientWidth);
   }, [window.innerWidth]);
 
+  const upadateCoverPicture = async () => {
+    try {
+      setLoading(true);
+      let img = await getCroppedImage();
+      let blob = await fetch(img).then((b) => b.blob());
+      const path = `${user.username}/cover_pictures`;
+      let formData = new FormData();
+      formData.append("file", blob);
+      formData.append("path", path);
+      const res = await uploadImages(formData, path, user.token);
+      const updated_picture = await updateCover(res[0].url, user.token);
+
+      if (updated_picture === "ok") {
+        const new_post = await createPost(
+          "coverPicture",
+          null,
+          null,
+          res,
+          user.id,
+          user.token
+        );
+        console.log(new_post);
+        if (new_post === "ok") {
+          setLoading(false);
+          setCoverPicture("");
+          cRef.current.src = res[0].url;
+        } else {
+          setLoading(false);
+          setError(new_post);
+        }
+      } else {
+        setLoading(false);
+        setError(updated_picture);
+      }
+    } catch (error) {
+      setLoading(false);
+      setError(error.response.data.error);
+    }
+  };
+
   return (
     <div className="profile_cover" ref={coverRef}>
       {coverPicture && (
@@ -73,8 +121,13 @@ export default function Cover({ cover, visitor }) {
             Your cover photo is public
           </div>
           <div className="save_changes_right">
-            <button className="fav_button opacity_btn">Cancel</button>
-            <button className="fav_button">Save Changes</button>
+            <button className="fav_button opacity_btn" onClick={()=>{setCoverPicture("")}}>Cancel</button>
+            <button
+              className="fav_button"
+              onClick={() => upadateCoverPicture()}
+            >
+              {loading ? <PulseLoader color="#fff" size={5} /> : "Save Changes"}
+            </button>
           </div>
         </div>
       )}
@@ -86,15 +139,15 @@ export default function Cover({ cover, visitor }) {
         onChange={handleImage}
       />
       {error && (
-        <div className="postError comment_error">
+        <div className="postError comment_error cover_error">
           <div className="postError_error">{error}</div>
           <button className="fav_button" onClick={() => setError("")}>
             Try again
           </button>
         </div>
       )}
-      <div className="cover_cropper">
-        {coverPicture && (
+      {coverPicture && (
+        <div className="cover_cropper">
           <Cropper
             image={coverPicture}
             crop={crop}
@@ -106,9 +159,10 @@ export default function Cover({ cover, visitor }) {
             showGrid={true}
             objectFit="horizontal-cover"
           />
-        )}
-      </div>
-      {cover && <img src={cover} className="cover" alt="" />}
+        </div>
+      )}
+      
+      {cover && !coverPicture && <img src={cover} className="cover" alt="" ref={cRef} />}
       {!visitor && (
         <div className="update_cover_wrapper">
           <div

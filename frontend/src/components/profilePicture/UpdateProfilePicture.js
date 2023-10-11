@@ -11,8 +11,8 @@ import Cookies from "js-cookie";
 export default function UpdateProfilePicture({
   setImage,
   image,
-  setShow,
   setError,
+  setShow,
   pRef,
 }) {
   const dispatch = useDispatch();
