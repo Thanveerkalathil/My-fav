@@ -18,7 +18,7 @@
   border-bottom-right-radius: 8px;
   background: var(--bg-secondary);
 }
-.cover{
+.cover {
   width: 100%;
   height: 100%;
   object-fit: cover;
@@ -380,6 +380,28 @@
 }
 .save_changes_right button:last-of-type {
   width: 160px;
+}
+.selectCoverBox {
+  width: 570px !important;
+  min-width: 80vw;
+}
+.selectCoverBox_links {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  padding: 5px 15px;
+}
+.selectCoverBox_link {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: 500;
+  font-size: 14px;
+  padding: 5px 0 10px 0;
+  cursor: pointer;
+}
+.selectCoverBox_link:first-of-type {
+  color: var(--fave-color);
+  border-bottom: 3px solid var(--fave-color);
 }
 
 /*---------Photos----------*/

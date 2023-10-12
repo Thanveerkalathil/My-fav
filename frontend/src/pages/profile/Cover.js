@@ -7,11 +7,13 @@ import { uploadImages } from "../../functions/uploadImages";
 import { updateCover } from "../../functions/user";
 import { createPost } from "../../functions/post";
 import PulseLoader from "react-spinners/PulseLoader";
+import OldCovers from "./OldCovers";
 
-export default function Cover({ cover, visitor }) {
+export default function Cover({ cover, visitor, photos }) {
   const [showCoverMenu, setShowCoverMenu] = useState(false);
   const [coverPicture, setCoverPicture] = useState("");
   const [loading, setLoading] = useState(false);
+  const [show, setShow] = useState(false);
   const { user } = useSelector((state) => ({ ...state }));
   const menuRef = useRef(null);
   const refInput = useRef(null);
@@ -121,7 +123,14 @@ export default function Cover({ cover, visitor }) {
             Your cover photo is public
           </div>
           <div className="save_changes_right">
-            <button className="fav_button opacity_btn" onClick={()=>{setCoverPicture("")}}>Cancel</button>
+            <button
+              className="fav_button opacity_btn"
+              onClick={() => {
+                setCoverPicture("");
+              }}
+            >
+              Cancel
+            </button>
             <button
               className="fav_button"
               onClick={() => upadateCoverPicture()}
@@ -161,8 +170,10 @@ export default function Cover({ cover, visitor }) {
           />
         </div>
       )}
-      
-      {cover && !coverPicture && <img src={cover} className="cover" alt="" ref={cRef} />}
+
+      {cover && !coverPicture && (
+        <img src={cover} className="cover" alt="" ref={cRef} />
+      )}
       {!visitor && (
         <div className="update_cover_wrapper">
           <div
@@ -174,7 +185,12 @@ export default function Cover({ cover, visitor }) {
           </div>
           {showCoverMenu && (
             <div className="open_cover_menu" ref={menuRef}>
-              <div className="open_cover_menu_item hover1">
+              <div
+                className="open_cover_menu_item hover1"
+                onClick={() => {
+                  setShow(true);
+                }}
+              >
                 <i className="photo_icon"></i>
                 Select Photo
               </div>
@@ -188,6 +204,13 @@ export default function Cover({ cover, visitor }) {
             </div>
           )}
         </div>
+      )}
+      {show && (
+        <OldCovers
+          photos={photos}
+          setCoverPicture={setCoverPicture}
+          setShow={setShow}
+        />
       )}
     </div>
   );
