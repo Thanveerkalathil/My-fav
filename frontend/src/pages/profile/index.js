@@ -14,6 +14,7 @@ import Post from "../../components/post";
 import Photos from "./Photos";
 import Friends from "./Friends";
 import "./style.css";
+import Intro from "../../components/intro";
 
 export default function Profile({ setVisible }) {
   const { username } = useParams();
@@ -102,6 +103,7 @@ export default function Profile({ setVisible }) {
           </div>
           <div className="profile_grid">
             <div className="profile_left">
+              <Intro detials={profile.detials} />
               <Photos username={userName} token={user.token} photos={photos} />
               <Friends friends={profile.friends} />
               <div className="relative_mf_copyright">
