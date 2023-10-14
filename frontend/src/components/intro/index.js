@@ -1,9 +1,10 @@
 import { useState } from "react";
 import "./style.css";
+import Bio from "./Bio";
 
-export default function Intro({ details }) {
+export default function Intro({ details, visitor }) {
   const initial = {
-    bio: details?.bio ? details.bio : "",
+    bio: details?.bio ? details.bio : "Welcome to my Profile",
     othername: details?.othername ? details.othername : "",
     job: details?.job ? details.job : "Web developer",
     workplace: details?.workplace ? details.workplace : "",
@@ -14,10 +15,38 @@ export default function Intro({ details }) {
     relationship: details?.relationship ? details.relationship : "Single",
     instagram: details?.instagram ? details.instagram : "thanveer_kalathil",
   };
+
   const [infos, setInfos] = useState(initial);
+  const [showBio, setShowBio] = useState(true);
+  const [max, setMax] = useState(infos?.bio ? 100 - infos?.bio.length : 100);
+  const handleBioChange = (e) => {
+    setInfos({ ...infos, bio: e.target.value });
+    setMax(100 - e.target.value.length);
+  };
   return (
     <div className="profile_card">
       <div className="profile_card_header">Intro</div>
+      {infos.bio && !showBio && (
+        <div className="info_col">
+          <span className="info_text">{infos.bio}</span>
+          {!visitor && (
+            <button
+              className="gray_btn hover1"
+              onClick={() => setShowBio(true)}
+            >
+              Edit bio
+            </button>
+          )}
+        </div>
+      )}
+      {showBio && (
+        <Bio
+          infos={infos}
+          max={max}
+          handleBioChange={handleBioChange}
+          setShowBio={setShowBio}
+        />
+      )}
       {infos.job && infos.workplace ? (
         <div className="info_profile">
           <img src="../../../icons/job.png" alt="" />
@@ -37,7 +66,7 @@ export default function Intro({ details }) {
           </div>
         )
       )}
-       {infos.relationship && (
+      {infos.relationship && (
         <div className="info_profile">
           <img src="../../../icons/relationship.png" alt="" />
           {infos.relationship}
@@ -74,6 +103,15 @@ export default function Intro({ details }) {
             {infos.instagram}
           </a>
         </div>
+      )}
+      {!visitor && (
+        <button className="gray_btn hover1 w100">Edit Details</button>
+      )}
+      {!visitor && (
+        <button className="gray_btn hover1 w100">Add Hobbies</button>
+      )}
+      {!visitor && (
+        <button className="gray_btn hover1 w100">Add Featured</button>
       )}
     </div>
   );

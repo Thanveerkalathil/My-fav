@@ -103,7 +103,7 @@ export default function Profile({ setVisible }) {
           </div>
           <div className="profile_grid">
             <div className="profile_left">
-              <Intro detials={profile.detials} />
+              <Intro detials={profile.detials} visitor={visitor}/>
               <Photos username={userName} token={user.token} photos={photos} />
               <Friends friends={profile.friends} />
               <div className="relative_mf_copyright">
