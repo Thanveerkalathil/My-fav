@@ -1,106 +1,135 @@
-import { useState } from "react";
-import "./style.css";
+import { useEffect, useState } from "react";
 import Bio from "./Bio";
-
-export default function Intro({ details, visitor }) {
+import "./style.css";
+import axios from "axios";
+import { useSelector } from "react-redux";
+export default function Intro({ detailss, visitor }) {
+  const { user } = useSelector((state) => ({ ...state }));
+  const [details, setDetails] = useState();
+  useEffect(() => {
+    setDetails(detailss);
+  }, [detailss]);
   const initial = {
-    bio: details?.bio ? details.bio : "Welcome to my Profile",
+    bio: details?.bio ? details.bio : "",
     othername: details?.othername ? details.othername : "",
-    job: details?.job ? details.job : "Web developer",
+    job: details?.job ? details.job : "",
     workplace: details?.workplace ? details.workplace : "",
-    highSchool: details?.highSchool ? details.highSchool : "rasheediya",
-    collage: details?.collage ? details.collage : "nalanda",
-    currentCity: details?.currentCity ? details.currentCity : "melattur",
-    hometown: details?.hometown ? details.hometown : "Kerala",
-    relationship: details?.relationship ? details.relationship : "Single",
-    instagram: details?.instagram ? details.instagram : "thanveer_kalathil",
+    highSchool: details?.highSchool ? details.highSchool : "",
+    college: details?.college ? details.college : "",
+    currentCity: details?.currentCity ? details.currentCity : "",
+    hometown: details?.hometown ? details.hometown : "",
+    relationship: details?.relationship ? details.relationship : "",
+    instagram: details?.instagram ? details.instagram : "",
   };
-
   const [infos, setInfos] = useState(initial);
-  const [showBio, setShowBio] = useState(true);
+  const [showBio, setShowBio] = useState(false);
   const [max, setMax] = useState(infos?.bio ? 100 - infos?.bio.length : 100);
   const handleBioChange = (e) => {
     setInfos({ ...infos, bio: e.target.value });
     setMax(100 - e.target.value.length);
   };
+  const updateDetails = async () => {
+    try {
+      console.log("sent");
+      const { data } = await axios.put(
+        `${process.env.REACT_APP_BACKEND_URL}/updateDetails`,
+        {
+          infos,
+        },
+        {
+          headers: {
+            Authorization: `Bearer ${user.token}`,
+          },
+        }
+      );
+      setShowBio(false);
+    } catch (error) {
+      console.log(error.response.data.message);
+    }
+  };
   return (
     <div className="profile_card">
       <div className="profile_card_header">Intro</div>
-      {infos.bio && !showBio && (
+      {details?.bio && !showBio && (
         <div className="info_col">
-          <span className="info_text">{infos.bio}</span>
+          <span className="info_text">{details?.bio}</span>
           {!visitor && (
             <button
               className="gray_btn hover1"
               onClick={() => setShowBio(true)}
             >
-              Edit bio
+              Edit Bio
             </button>
           )}
         </div>
       )}
+
       {showBio && (
         <Bio
           infos={infos}
           max={max}
           handleBioChange={handleBioChange}
           setShowBio={setShowBio}
+          updateDetails={updateDetails}
         />
       )}
-      {infos.job && infos.workplace ? (
+      {details?.job && details?.workplace ? (
         <div className="info_profile">
           <img src="../../../icons/job.png" alt="" />
-          Work as {infos.job} at <b>{infos.workplace}</b>
+          works as {details?.job} at <b>{details?.workplace}</b>
         </div>
-      ) : infos.job && !infos.workplace ? (
+      ) : details?.job && !details?.workplace ? (
         <div className="info_profile">
           <img src="../../../icons/job.png" alt="" />
-          Work as {infos.job}
+          works as {details?.job}
         </div>
       ) : (
-        infos.workplace &&
-        !infos.job && (
+        details?.workplace &&
+        !details?.job && (
           <div className="info_profile">
             <img src="../../../icons/job.png" alt="" />
-            Work at {infos.workplace}
+            works at {details?.workplace}
           </div>
         )
       )}
-      {infos.relationship && (
+      {details?.relationship && (
         <div className="info_profile">
           <img src="../../../icons/relationship.png" alt="" />
-          {infos.relationship}
+          {details?.relationship}
         </div>
       )}
-      {infos.collage && (
+      {details?.college && (
         <div className="info_profile">
           <img src="../../../icons/studies.png" alt="" />
-          Studied at {infos.collage}
+          studied at {details?.college}
         </div>
       )}
-      {infos.highSchool && (
+      {details?.highSchool && (
         <div className="info_profile">
           <img src="../../../icons/studies.png" alt="" />
-          Studied at {infos.highSchool}
+          studied at {details?.highSchool}
         </div>
       )}
-      {infos.currentCity && (
+      {details?.currentCity && (
         <div className="info_profile">
           <img src="../../../icons/home.png" alt="" />
-          Lives in {infos.currentCity}
+          Lives in {details?.currentCity}
         </div>
       )}
-      {infos.hometown && (
+      {details?.hometown && (
         <div className="info_profile">
           <img src="../../../icons/home.png" alt="" />
-          From {infos.hometown}
+          From {details?.hometown}
         </div>
       )}
-      {infos.instagram && (
+      {details?.hometown && (
         <div className="info_profile">
           <img src="../../../icons/instagram.png" alt="" />
-          <a href={`https://instagram.com/${infos.instagram}`} target="blank">
-            {infos.instagram}
+          <a
+            href={`https://www.instagram.com/${details?.instagram}`}
+            target="_blank"
+          >
+            {details?.instagram}
           </a>
         </div>
       )}
