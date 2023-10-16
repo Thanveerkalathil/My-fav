@@ -679,9 +679,9 @@
   height: 32px;
   background-repeat: no-repeat;
   display: inline-block;
-  -webkit-filter: invert(39%) sepia(57%) saturate(200%) saturate(200%)
-    saturate(200%) saturate(200%) saturate(200%) saturate(147.75%)
-    hue-rotate(202deg) brightness(97%) contrast(96%);
+  -webkit-filter: invert(64%) sepia(57%) saturate(200%) saturate(200%) saturate(160%)
+  saturate(150%) saturate(150%) saturate(147.75%) hue-rotate(120deg)
+  brightness(75%) contrast(80%);
 }
 .equalize_icon {
   background-image: url(../../../src/icons/icons26.png);
