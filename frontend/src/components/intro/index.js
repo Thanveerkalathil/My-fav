@@ -10,10 +10,11 @@ export default function Intro({ detailss, visitor }) {
   const [visible, setVisible] = useState(1);
   useEffect(() => {
     setDetails(detailss);
+    setInfos(detailss);
   }, [detailss]);
   const initial = {
     bio: details?.bio ? details.bio : "",
-    othername: details?.othername ? details.othername : "",
+    otherName: details?.otherName ? details.otherName : "",
     job: details?.job ? details.job : "",
     workplace: details?.workplace ? details.workplace : "",
     highSchool: details?.highSchool ? details.highSchool : "",
@@ -24,12 +25,10 @@ export default function Intro({ detailss, visitor }) {
     instagram: details?.instagram ? details.instagram : "",
   };
   const [infos, setInfos] = useState(initial);
+  console.log(infos);
   const [showBio, setShowBio] = useState(false);
   const [max, setMax] = useState(infos?.bio ? 100 - infos?.bio.length : 100);
-  const handleBioChange = (e) => {
-    setInfos({ ...infos, bio: e.target.value });
-    setMax(100 - e.target.value.length);
-  };
+
   const updateDetails = async () => {
     try {
       console.log("sent");
@@ -82,7 +81,7 @@ export default function Intro({ detailss, visitor }) {
         <Bio
           infos={infos}
           max={max}
-          handleBioChange={handleChange}
+          handleChange={handleChange}
           setShowBio={setShowBio}
           updateDetails={updateDetails}
           placeholder="Add Bio"
@@ -152,7 +151,14 @@ export default function Intro({ detailss, visitor }) {
       {!visitor && (
         <button className="gray_btn hover1 w100">Edit Details</button>
       )}
-      {visible && !visitor && <EditDetails details={details} />}
+      {visible && !visitor && (
+        <EditDetails
+          details={details}
+          handleChange={handleChange}
+          updateDetails={updateDetails}
+          infos={infos}
+        />
+      )}
       {!visitor && (
         <button className="gray_btn hover1 w100">Add Hobbies</button>
       )}
