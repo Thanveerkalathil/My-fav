@@ -13,8 +13,8 @@
 @media (max-width: 1175px) {
   .stories,
   .createPost,
-  
-  .post, .send_verification {
+  .post,
+  .send_verification {
     width: 84%;
   }
   .home_middle {
@@ -59,13 +59,15 @@
   }
   .stories,
   .createPost,
-  .post, .send_verification {
+  .post,
+  .send_verification {
     width: 100%;
   }
 }
 @media (max-width: 960px) {
   .createPost,
-  .post, .send_verification {
+  .post,
+  .send_verification {
     width: 93%;
   }
   .stories {
@@ -93,7 +95,8 @@
     display: none;
   }
   .createPost,
-  .post, .send_verification {
+  .post,
+  .send_verification {
     width: 110%;
   }
   .stories {
@@ -138,7 +141,8 @@
   }
   .stories,
   .createPost,
-  .post, .send_verification {
+  .post,
+  .send_verification {
     width: 100%;
   }
   .stories .white_circle {
@@ -146,6 +150,7 @@
   }
   .stories {
     grid-template-columns: repeat(6, 14vw);
+    padding-left: 10px;
   }
   .story,
   .create_story_card {
@@ -159,6 +164,31 @@
   }
   .createPost_icon svg {
     width: 20px;
+  }
+}
+@media (max-width: 400px) {
+  .createPost,
+  .post {
+    margin-top: 1rem;
+  }
+  .home_middle,
+  .createPost,
+  .post {
+    width: 98%;
+    margin: 1rem auto;
+  }
+  .send_verification {
+    width: 98%;
+    margin: 0 auto;
+  }
+  .stories {
+    grid-template-columns: repeat(6, 13vw);
+  }
+  .home_middle {
+    margin: 56px auto;
+  }
+  .createPost_body {
+    padding: 5px 0;
   }
 }
 /*-----Activate popup----*/

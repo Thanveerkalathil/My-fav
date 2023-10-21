@@ -433,6 +433,21 @@
   }
   .profile_grid {
     grid-template-columns: 1fr;
-    width: 90%;
+  }
+  .profile_grid .createPost {
+    width: 100% !important;
+  }
+  .bottom_container {
+    padding: 5px;
+  }
+}
+@media (max-width: 650px) {
+  .profile_menu_wrap {
+    display: none;
+  }
+}
+@media (max-width: 510) {
+  .profile_menu_wrapper {
+    bottom: 3rem;
   }
 }
