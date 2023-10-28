@@ -241,7 +241,7 @@ exports.changePassword = async (req, res) => {
 exports.getProfile = async (req, res) => {
   try {
     const { username } = req.params;
-    const user = await User.findById(request.user.id);
+    const user = await User.findById(req.user.id);
     const profile = await User.findOne({ username }).select("-password");
     const friendship = {
       friends: false,
@@ -261,10 +261,10 @@ exports.getProfile = async (req, res) => {
     if (user.following.includes(profile._id)) {
       friendship.following = true;
     }
-    if (user.requests.incluses(profile._id)) {
+    if (user.requests.includes(profile._id)) {
       friendship.requestReceived = true;
     }
-    if (profile.requests.incluses(user._id)) {
+    if (profile.requests.includes(user._id)) {
       friendship.requestSent = true;
     }
     const posts = await Post.find({ user: profile._id })
@@ -503,7 +503,7 @@ exports.deleteRequest = async (req, res) => {
     if (req.user.id !== req.params.id) {
       const receiver = await User.findById(req.user.id);
       const sender = await User.findById(req.params.id);
-      if (receiver.request.includes(sender._id)) {
+      if (receiver.requests.includes(sender._id)) {
         await receiver.update({
           $pull: {
             request: sender._id,
