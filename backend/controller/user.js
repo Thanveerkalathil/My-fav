@@ -8,17 +8,18 @@ const Post = require("../models/Post");
 const Code = require("../models/Code");
 const jwt = require("jsonwebtoken");
 const bcrypt = require("bcrypt");
-const { generatorToken } = require("../helpers/tokens");
+const cloudinary = require("cloudinary");
+const { generateToken } = require("../helpers/tokens");
 const { sendVerificationEmail, sendResetCode } = require("../helpers/mailer");
 const generateCode = require("../helpers/generateCode");
 exports.register = async (req, res) => {
   try {
-    console.log(req.body);
     const {
       first_name,
       last_name,
       email,
       password,
+      username,
       bYear,
       bMonth,
       bDay,
@@ -27,30 +28,30 @@ exports.register = async (req, res) => {
 
     if (!validateEmail(email)) {
       return res.status(400).json({
-        message: "Invalid email address",
+        message: "invalid email address",
       });
     }
     const check = await User.findOne({ email });
     if (check) {
       return res.status(400).json({
-        message: "This email address is already exist.Try with a diffrent",
+        message:
+          "This email address already exists,try with a different email address",
       });
     }
+
     if (!validateLength(first_name, 3, 30)) {
       return res.status(400).json({
-        message: "First Name must between 3 and 30 charecters.",
+        message: "first name must between 3 and 30 characters.",
       });
     }
-
     if (!validateLength(last_name, 3, 30)) {
       return res.status(400).json({
-        message: "Last Name must between 3 and 30 charecters.",
+        message: "last name must between 3 and 30 characters.",
       });
     }
-
     if (!validateLength(password, 6, 40)) {
       return res.status(400).json({
-        message: "Password must between 6 and 40 charecters.",
+        message: "password must be atleast 6 characters.",
       });
     }
 
@@ -69,14 +70,13 @@ exports.register = async (req, res) => {
       bDay,
       gender,
     }).save();
-
-    const emailVerificationToken = generatorToken(
+    const emailVerificationToken = generateToken(
       { id: user._id.toString() },
       "30m"
     );
     const url = `${process.env.BASE_URL}/activate/${emailVerificationToken}`;
     sendVerificationEmail(user.email, user.first_name, url);
-    const token = generatorToken({ id: user._id.toString() }, "7d");
+    const token = generateToken({ id: user._id.toString() }, "7d");
     res.send({
       id: user._id,
       username: user.username,
@@ -85,10 +85,9 @@ exports.register = async (req, res) => {
       last_name: user.last_name,
       token: token,
       verified: user.verified,
-      message: "Registration success ! please activate your email to start",
+      message: "Register Success ! please activate your email to start",
     });
   } catch (error) {
-    console.log(error.message);
     res.status(500).json({ message: error.message });
   }
 };
@@ -101,20 +100,18 @@ exports.activateAccount = async (req, res) => {
 
     if (validUser !== user.id) {
       return res.status(400).json({
-        message: "You don't have the autherization to complete this operation.",
+        message: "You don't have the authorization to complete this operation.",
       });
     }
-
-    console.log(check);
     if (check.verified == true) {
       return res
         .status(400)
-        .json({ message: "This email is already activated" });
+        .json({ message: "This email is already activated." });
     } else {
       await User.findByIdAndUpdate(user.id, { verified: true });
-      return res.status(200).json({
-        message: "Account has been activated successfully.",
-      });
+      return res
+        .status(200)
+        .json({ message: "Account has beeen activated successfully." });
     }
   } catch (error) {
     res.status(500).json({ message: error.message });
@@ -126,16 +123,17 @@ exports.login = async (req, res) => {
     const user = await User.findOne({ email });
     if (!user) {
       return res.status(400).json({
-        message: "The email address you entered is not connected to an account",
+        message:
+          "the email address you entered is not connected to an account.",
       });
     }
     const check = await bcrypt.compare(password, user.password);
     if (!check) {
-      return res
-        .status(400)
-        .json({ message: "Invalid credentials.Please try again" });
+      return res.status(400).json({
+        message: "Invalid credentials.Please try again.",
+      });
     }
-    const token = generatorToken({ id: user._id.toString() }, "7d");
+    const token = generateToken({ id: user._id.toString() }, "7d");
     res.send({
       id: user._id,
       username: user.username,
@@ -149,25 +147,23 @@ exports.login = async (req, res) => {
     res.status(500).json({ message: error.message });
   }
 };
-
 exports.sendVerification = async (req, res) => {
   try {
     const id = req.user.id;
     const user = await User.findById(id);
     if (user.verified === true) {
       return res.status(400).json({
-        message: "This account already activated.",
+        message: "This account is already activated.",
       });
     }
-
-    const emailVerificationToken = generatorToken(
+    const emailVerificationToken = generateToken(
       { id: user._id.toString() },
       "30m"
     );
     const url = `${process.env.BASE_URL}/activate/${emailVerificationToken}`;
     sendVerificationEmail(user.email, user.first_name, url);
     return res.status(200).json({
-      message: "Email verification link has been send to your email.",
+      message: "Email verification link has been sent to your email.",
     });
   } catch (error) {
     res.status(500).json({ message: error.message });
@@ -220,7 +216,7 @@ exports.validateResetCode = async (req, res) => {
         message: "Verification code is wrong..",
       });
     }
-    return res.status(200).json({ message: "Ok" });
+    return res.status(200).json({ message: "ok" });
   } catch (error) {
     res.status(500).json({ message: error.message });
   }
@@ -228,6 +224,7 @@ exports.validateResetCode = async (req, res) => {
 
 exports.changePassword = async (req, res) => {
   const { email, password } = req.body;
+
   const cryptedPassword = await bcrypt.hash(password, 12);
   await User.findOneAndUpdate(
     { email },
@@ -252,6 +249,7 @@ exports.getProfile = async (req, res) => {
     if (!profile) {
       return res.json({ ok: false });
     }
+
     if (
       user.friends.includes(profile._id) &&
       profile.friends.includes(user._id)
@@ -267,10 +265,12 @@ exports.getProfile = async (req, res) => {
     if (profile.requests.includes(user._id)) {
       friendship.requestSent = true;
     }
+
     const posts = await Post.find({ user: profile._id })
       .populate("user")
       .sort({ createdAt: -1 });
-    res.json({ ...profile.toObject(), posts ,friendship});
+
+    res.json({ ...profile.toObject(), posts, friendship });
   } catch (error) {
     res.status(500).json({ message: error.message });
   }
@@ -279,6 +279,7 @@ exports.getProfile = async (req, res) => {
 exports.updateProfilePicture = async (req, res) => {
   try {
     const { url } = req.body;
+
     await User.findByIdAndUpdate(req.user.id, {
       picture: url,
     });
@@ -291,6 +292,7 @@ exports.updateProfilePicture = async (req, res) => {
 exports.updateCover = async (req, res) => {
   try {
     const { url } = req.body;
+
     await User.findByIdAndUpdate(req.user.id, {
       cover: url,
     });
@@ -303,6 +305,7 @@ exports.updateCover = async (req, res) => {
 exports.updateDetails = async (req, res) => {
   try {
     const { infos } = req.body;
+
     const updated = await User.findByIdAndUpdate(
       req.user.id,
       {
@@ -317,7 +320,6 @@ exports.updateDetails = async (req, res) => {
     res.status(500).json({ message: error.message });
   }
 };
-
 exports.addFriend = async (req, res) => {
   try {
     if (req.user.id !== req.params.id) {
@@ -328,17 +330,17 @@ exports.addFriend = async (req, res) => {
         !receiver.friends.includes(sender._id)
       ) {
         await receiver.updateOne({
-          $push: { request: sender._id },
+          $push: { requests: sender._id },
         });
         await receiver.updateOne({
           $push: { followers: sender._id },
         });
         await sender.updateOne({
-          $push: { following: sender._id },
+          $push: { following: receiver._id },
         });
-        res.json({ message: "Friend request has been sent" });
+        res.json({ message: "friend request has been sent" });
       } else {
-        return res.status(400).json({ message: "Already send" });
+        return res.status(400).json({ message: "Already sent" });
       }
     } else {
       return res
@@ -349,7 +351,7 @@ exports.addFriend = async (req, res) => {
     res.status(500).json({ message: error.message });
   }
 };
-exports.cancerRequest = async (req, res) => {
+exports.cancelRequest = async (req, res) => {
   try {
     if (req.user.id !== req.params.id) {
       const sender = await User.findById(req.user.id);
@@ -359,7 +361,7 @@ exports.cancerRequest = async (req, res) => {
         !receiver.friends.includes(sender._id)
       ) {
         await receiver.updateOne({
-          $pull: { request: sender._id },
+          $pull: { requests: sender._id },
         });
         await receiver.updateOne({
           $pull: { followers: sender._id },
@@ -367,9 +369,9 @@ exports.cancerRequest = async (req, res) => {
         await sender.updateOne({
           $pull: { following: sender._id },
         });
-        res.json({ message: "You successfully canceled request" });
+        res.json({ message: "you successfully canceled request" });
       } else {
-        return res.status(400).json({ message: "Already cancelled" });
+        return res.status(400).json({ message: "Already Canceled" });
       }
     } else {
       return res
@@ -394,7 +396,7 @@ exports.follow = async (req, res) => {
         });
 
         await sender.updateOne({
-          $push: { following: sender._id },
+          $push: { following: receiver._id },
         });
         res.json({ message: "follow success" });
       } else {
@@ -421,7 +423,7 @@ exports.unfollow = async (req, res) => {
         });
 
         await sender.updateOne({
-          $pull: { following: sender._id },
+          $pull: { following: receiver._id },
         });
         res.json({ message: "unfollow success" });
       } else {
@@ -440,24 +442,23 @@ exports.acceptRequest = async (req, res) => {
       const receiver = await User.findById(req.user.id);
       const sender = await User.findById(req.params.id);
       if (receiver.requests.includes(sender._id)) {
-        await receiver.updateOne({
+        await receiver.update({
           $push: { friends: sender._id, following: sender._id },
         });
-
         await sender.update({
           $push: { friends: receiver._id, followers: receiver._id },
         });
-        await receiver.update({
-          $pull: { request: sender._id },
+        await receiver.updateOne({
+          $pull: { requests: sender._id },
         });
         res.json({ message: "friend request accepted" });
       } else {
-        return res.status(400).json({ message: "Already not friends" });
+        return res.status(400).json({ message: "Already friends" });
       }
     } else {
       return res
         .status(400)
-        .json({ message: "You can't accept a request from yourself" });
+        .json({ message: "You can't accept a request from  yourself" });
     }
   } catch (error) {
     res.status(500).json({ message: error.message });
@@ -481,15 +482,15 @@ exports.unfriend = async (req, res) => {
         });
         await sender.update({
           $pull: {
-            friends: sender._id,
-            following: sender._id,
-            followers: sender._id,
+            friends: receiver._id,
+            following: receiver._id,
+            followers: receiver._id,
           },
         });
 
         res.json({ message: "unfriend request accepted" });
       } else {
-        return res.status(400).json({ message: "Already not unfriends" });
+        return res.status(400).json({ message: "Already not friends" });
       }
     } else {
       return res.status(400).json({ message: "You can't unfriend yourself" });
@@ -506,13 +507,13 @@ exports.deleteRequest = async (req, res) => {
       if (receiver.requests.includes(sender._id)) {
         await receiver.update({
           $pull: {
-            request: sender._id,
-            following: sender._id,
+            requests: sender._id,
+            followers: sender._id,
           },
         });
         await sender.update({
           $pull: {
-            following: sender._id,
+            following: receiver._id,
           },
         });
 

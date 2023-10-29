@@ -14,14 +14,14 @@ const {
   updateCover,
   updateDetails,
   addFriend,
-  cancerRequest,
+  cancelRequest,
   follow,
   unfollow,
   acceptRequest,
   unfriend,
   deleteRequest,
-} = require("../controller/user");
-const { authUser } = require("../middleware/auth");
+} = require('../controllers/user');
+const { authUser } = require("../middlwares/auth");
 
 const router = express.Router();
 
@@ -38,7 +38,7 @@ router.put("/updateProfilePicture", authUser, updateProfilePicture);
 router.put("/updateCover", authUser, updateCover);
 router.put("/updateDetails", authUser, updateDetails);
 router.put("/addFriend/:id", authUser, addFriend);
-router.put("/cancerRequest/:id", authUser, cancerRequest);
+router.put("/cancelRequest/:id", authUser, cancelRequest);
 router.put("/follow/:id", authUser, follow);
 router.put("/unfollow/:id", authUser, unfollow);
 router.put("/acceptRequest/:id", authUser, acceptRequest);
