@@ -38,7 +38,7 @@ export default function Friendship({ friendshipp, profileid }) {
     setFriendship({ ...friendship, following: false });
     await unfollow(profileid, user.token);
   };
-  const acceptRequestHandler = async () => {
+  const acceptRequestHanlder = async () => {
     setFriendship({
       ...friendship,
       friends: true,
@@ -58,7 +58,7 @@ export default function Friendship({ friendshipp, profileid }) {
     });
     await unfriend(profileid, user.token);
   };
-  const deleteRequestHandler = async () => {
+  const deleteRequestHanlder = async () => {
     setFriendship({
       ...friendship,
       friends: false,
@@ -68,6 +68,7 @@ export default function Friendship({ friendshipp, profileid }) {
     });
     await deleteRequest(profileid, user.token);
   };
+
   return (
     <div className="friendship">
       {friendship?.friends ? (
@@ -142,13 +143,13 @@ export default function Friendship({ friendshipp, profileid }) {
               <div className="open_cover_menu" ref={menu1}>
                 <div
                   className="open_cover_menu_item hover1"
-                  onClick={() => acceptRequestHandler()}
+                  onClick={() => acceptRequestHanlder()}
                 >
                   Confirm
                 </div>
                 <div
                   className="open_cover_menu_item hover1"
-                  onClick={() => deleteRequestHandler()}
+                  onClick={() => deleteRequestHanlder()}
                 >
                   Delete
                 </div>
