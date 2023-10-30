@@ -443,15 +443,23 @@
   .friendship {
     transform: translateY(-4rem);
   }
+  .othername {
+    transform: translateY(-10px);
+  }
 }
 @media (max-width: 650px) {
   .profile_menu_wrap {
     display: none;
   }
 }
-@media (max-width: 510) {
+@media (max-width: 510px) {
   .profile_menu_wrapper {
     bottom: 3rem;
+  }
+}
+@media (max-width: 405px) {
+  .friendship {
+    flex-direction: column;
   }
 }
 .scrollFixed .profile_left {
@@ -475,5 +483,10 @@
   gap: 10px;
 }
 .friendship .fav_button {
-  height: 35px;
+  height: 34px;
+}
+@media (min-width: 900px) {
+  .friendship {
+    transform: translateX(-2rem);
+  }
 }
