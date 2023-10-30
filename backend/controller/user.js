@@ -419,7 +419,7 @@ exports.unfollow = async (req, res) => {
         sender.following.includes(receiver._id)
       ) {
         await receiver.updateOne({
-          $push: { followers: sender._id },
+          $pull: { followers: sender._id },
         });
 
         await sender.updateOne({
@@ -442,10 +442,10 @@ exports.acceptRequest = async (req, res) => {
       const receiver = await User.findById(req.user.id);
       const sender = await User.findById(req.params.id);
       if (receiver.requests.includes(sender._id)) {
-        await receiver.update({
+        await receiver.updateMany({
           $push: { friends: sender._id, following: sender._id },
         });
-        await sender.update({
+        await sender.updateMany({
           $push: { friends: receiver._id, followers: receiver._id },
         });
         await receiver.updateOne({
@@ -473,14 +473,14 @@ exports.unfriend = async (req, res) => {
         receiver.friends.includes(sender._id) &&
         sender.friends.includes(receiver._id)
       ) {
-        await receiver.update({
+        await receiver.updateMany({
           $pull: {
             friends: sender._id,
             following: sender._id,
             followers: sender._id,
           },
         });
-        await sender.update({
+        await sender.updateMany({
           $pull: {
             friends: receiver._id,
             following: receiver._id,
@@ -505,13 +505,13 @@ exports.deleteRequest = async (req, res) => {
       const receiver = await User.findById(req.user.id);
       const sender = await User.findById(req.params.id);
       if (receiver.requests.includes(sender._id)) {
-        await receiver.update({
+        await receiver.updateMany({
           $pull: {
             requests: sender._id,
             followers: sender._id,
           },
         });
-        await sender.update({
+        await sender.updateOne({
           $pull: {
             following: receiver._id,
           },
