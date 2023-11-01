@@ -27,3 +27,23 @@ exports.reactPost = async (req, res) => {
     return res.status(500).json({ message: error.message });
   }
 };
+exports.getReacts = async (req, res) => {
+  try {
+    const reacts = await React.find({ postRef: req.params.id });
+    const check = await React.findOne({
+      postRef: req.params.id,
+      reactBy: req.user.id,
+    });
+    res.json({
+      reacts,
+      check: check?.react,
+    });
+    /*
+    ----otherway---
+    const check1 = reacts.find((x)=> x.reactBy.toString() == req.user.id)?.react
+    console.log(check1)
+    */
+  } catch (error) {
+    return res.status(500).json({ message: error.message });
+  }
+};

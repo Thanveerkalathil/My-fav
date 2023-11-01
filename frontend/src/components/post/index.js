@@ -1,15 +1,27 @@
 import { Link } from "react-router-dom";
+import "./style.css";
 import CreateComment from "./CreateComment";
 import PostMenu from "./PostMenu";
 import { Dots, Public } from "../../svg";
-import "./style.css";
 import Moment from "react-moment";
 import ReactsPopup from "./ReactsPopup";
-import { useState } from "react";
+import { useEffect, useState } from "react";
+import { getReacts } from "../../functions/post";
 export default function Post({ post, user, profile }) {
   const [visible, setVisible] = useState(false);
   const [showMenu, setShowMenu] = useState(false);
+  const [reacts, setReacts] = useState();
+  const [check, setCheck] = useState();
+  useEffect(() => {
+    getPostReacts();
+  }, [post]);
 
+  const getPostReacts = async () => {
+    const res = await getReacts(post._id, user.token);
+    setReacts(res.reacts);
+    setCheck(res.check);
+  };
+  console.log(check);
   return (
     <div className="post" style={{ width: `${profile && "100%"}` }}>
       <div className="post_header">
@@ -105,7 +117,11 @@ export default function Post({ post, user, profile }) {
         </div>
       </div>
       <div className="post_actions">
-        <ReactsPopup visible={visible} setVisible={setVisible} />
+        <ReactsPopup
+          visible={visible}
+          setVisible={setVisible}
+          postId={post._id}
+        />
         <div
           className="post_action hover1"
           onMouseOver={() => {
@@ -119,7 +135,16 @@ export default function Post({ post, user, profile }) {
             }, 500);
           }}
         >
-          <i className="like_icon "></i>
+          {check ? (
+            <img
+              src={`../../../reacts/${check}.svg`}
+              alt=""
+              className="small_react"
+              style={{ width: "18px" }}
+            />
+          ) : (
+            <i className="like_icon "></i>
+          )}
           <span>Like</span>
         </div>
         <div className="post_action hover1">
