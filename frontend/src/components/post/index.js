@@ -6,7 +6,7 @@ import { Dots, Public } from "../../svg";
 import Moment from "react-moment";
 import ReactsPopup from "./ReactsPopup";
 import { useEffect, useState } from "react";
-import { getReacts } from "../../functions/post";
+import { getReacts, reactPost } from "../../functions/post";
 export default function Post({ post, user, profile }) {
   const [visible, setVisible] = useState(false);
   const [showMenu, setShowMenu] = useState(false);
@@ -21,7 +21,14 @@ export default function Post({ post, user, profile }) {
     setReacts(res.reacts);
     setCheck(res.check);
   };
-  console.log(check);
+  const reactHandler = async (type) => {
+    reactPost(post._id, type, user.token);
+    if (check == type) {
+      setCheck();
+    } else {
+      setCheck(type);
+    }
+  };
   return (
     <div className="post" style={{ width: `${profile && "100%"}` }}>
       <div className="post_header">
@@ -120,7 +127,7 @@ export default function Post({ post, user, profile }) {
         <ReactsPopup
           visible={visible}
           setVisible={setVisible}
-          postId={post._id}
+          reactHandler={reactHandler}
         />
         <div
           className="post_action hover1"
@@ -134,6 +141,7 @@ export default function Post({ post, user, profile }) {
               setVisible(false);
             }, 500);
           }}
+          onClick={() => reactHandler(check ? check : "like")}
         >
           {check ? (
             <img
@@ -143,9 +151,31 @@ export default function Post({ post, user, profile }) {
               style={{ width: "18px" }}
             />
           ) : (
-            <i className="like_icon "></i>
+            <i className="like_icon"></i>
           )}
-          <span>Like</span>
+          <span
+            style={{
+              color: `
+              ${
+                check === "like"
+                  ? "#4267b2"
+                  : check === "love"
+                  ? "#f63459"
+                  : check === "haha"
+                  ? "#f7b125"
+                  : check === "wow"
+                  ? "#f7b125"
+                  : check === "sad"
+                  ? "#f7b125"
+                  : check === "angry"
+                  ? "#e4605a"
+                  : ""
+              }
+              `,
+            }}
+          >
+            {check ? check : "Like"}
+          </span>
         </div>
         <div className="post_action hover1">
           <i className="comment_icon"></i>

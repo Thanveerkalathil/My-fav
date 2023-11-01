@@ -28,11 +28,7 @@ const reactsArray = [
     image: "../../../reacts/angry.gif",
   },
 ];
-export default function ReactsPopup({ visible, setVisible, postId }) {
-  const { user } = useSelector((state) => ({ ...state }));
-  const reactHandler = async (type) => {
-    reactPost(postId, type, user.token);
-  };
+export default function ReactsPopup({ visible, setVisible, reactHandler }) {
   return (
     <>
       {visible && (
