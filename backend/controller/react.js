@@ -69,10 +69,6 @@ exports.getReacts = async (req, res) => {
       },
     ];
 
-    reacts.sort((a, b) => {
-      return b.count - a.count;
-    });
-
     const check = await React.findOne({
       postRef: req.params.id,
       reactBy: req.user.id,

@@ -321,6 +321,7 @@
   font-weight: 600;
   font-size: 16px;
   transform: translateY(-1px);
+  text-transform: capitalize;
 }
 .reacts_popup {
   display: flex;
@@ -535,7 +536,7 @@
     width: 32px;
     height: 32px;
   }
-  .comment_input_wrap input{
+  .comment_input_wrap input {
     font-size: 12px;
   }
 }
