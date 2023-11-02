@@ -12,6 +12,7 @@ export default function Post({ post, user, profile }) {
   const [showMenu, setShowMenu] = useState(false);
   const [reacts, setReacts] = useState();
   const [check, setCheck] = useState();
+  const [total, setTotal] = useState(0);
   useEffect(() => {
     getPostReacts();
   }, [post]);
@@ -20,6 +21,7 @@ export default function Post({ post, user, profile }) {
     const res = await getReacts(post._id, user.token);
     setReacts(res.reacts);
     setCheck(res.check);
+    setTotal(res.total);
   };
   const reactHandler = async (type) => {
     reactPost(post._id, type, user.token);
@@ -29,6 +31,7 @@ export default function Post({ post, user, profile }) {
       setCheck(type);
     }
   };
+  console.log(reacts);
   return (
     <div className="post" style={{ width: `${profile && "100%"}` }}>
       <div className="post_header">
@@ -115,8 +118,18 @@ export default function Post({ post, user, profile }) {
       )}
       <div className="post_infos">
         <div className="reacts_count">
-          <div className="reacts_count_imgs"></div>
-          <div className="reacts_count_num"></div>
+          <div className="reacts_count_imgs">
+            {reacts &&
+              reacts
+                .slice(0, 3)
+                .map(
+                  (react) =>
+                    react.count > 0 && (
+                      <img src={`../../../reacts/${react.react}.svg`} alt="" />
+                    )
+                )}
+          </div>
+          <div className="reacts_count_num">{total > 0 && total}</div>
         </div>
         <div className="to_right">
           <div className="comments_count">14 comments</div>
