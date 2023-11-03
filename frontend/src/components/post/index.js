@@ -41,7 +41,7 @@ export default function Post({ post, user, profile }) {
         setTotal((prev) => ++prev);
         console.log(reacts);
       }
-      if (index1 !== -1) {
+      if (reacts[index1].count > 0 && index1 !== -1) {
         setReacts([...reacts, (reacts[index1].count = --reacts[index1].count)]);
         setTotal((prev) => --prev);
         console.log(reacts);
