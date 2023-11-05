@@ -9,16 +9,16 @@ import Stories from "../../components/home/stories";
 import Post from "../../components/post";
 import "./style.css";
 
-export default function Home({ setVisible, posts }) {
+export default function Home({ setVisible, posts, loading }) {
   const { user } = useSelector((state) => ({ ...state }));
   const middle = useRef(null);
   const [height, setHeight] = useState();
   useEffect(() => {
     setHeight(middle.current.clientHeight);
-  }, []);
+  }, [loading, height]);
   return (
     <div className="home" style={{ height: `${height + 150}px` }}>
-      <Header page="home"/>
+      <Header page="home" />
       <LeftHome user={user} />
       <div className="home_middle" ref={middle}>
         <Stories />
@@ -26,7 +26,7 @@ export default function Home({ setVisible, posts }) {
         <CreatePost user={user} setVisible={setVisible} />
         <div className="posts">
           {posts.map((post) => (
-            <Post key={post._id} post={post} user={user}/>
+            <Post key={post._id} post={post} user={user} />
           ))}
         </div>
       </div>
