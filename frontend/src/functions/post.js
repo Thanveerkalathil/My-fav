@@ -23,12 +23,11 @@ export const createPost = async (
         },
       }
     );
-    return "ok";
+    return { status: "ok", data };
   } catch (error) {
     return error.response.data.message;
   }
 };
-
 export const reactPost = async (postId, react, token) => {
   try {
     const { data } = await axios.put(

@@ -6,14 +6,19 @@ import AddToYourPost from "./AddToYourPost";
 import ImagePreview from "./ImagePreview";
 import useClickOutside from "../../helpers/clickOutside";
 import { createPost } from "../../functions/post";
-import PulseLoader from "react-spinners/PulseLoader";
+import HashLoader from "react-spinners/HashLoader";
 import { useDispatch } from "react-redux";
 import PostError from "./postError";
 import dataURItoBlob from "../../helpers/dataURItoBlob";
 import { uploadImages } from "../../functions/uploadImages";
 
-export default function CreatePostPopup({ user, setVisible }) {
-  const dispatch = useDispatch();
+export default function CreatePostPopup({
+  user,
+  setVisible,
+  posts,
+  dispatch,
+  profile,
+}) {
   const popup = useRef(null);
   const [text, setText] = useState("");
   const [showPrev, setShowPrev] = useState(false);
@@ -37,7 +42,11 @@ export default function CreatePostPopup({ user, setVisible }) {
       );
       setLoading(false);
 
-      if (response === "ok") {
+      if (response.status === "ok") {
+        dispatch({
+          type: profile ? "PROFILE_POSTS" : "POSTS_SUCCESS",
+          payload: [response.data, ...posts],
+        });
         setBackground("");
         setText("");
         setVisible(false);
@@ -65,7 +74,11 @@ export default function CreatePostPopup({ user, setVisible }) {
         user.token
       );
       setLoading(false);
-      if (res === "ok") {
+      if (res.status === "ok") {
+        dispatch({
+          type: profile ? "PROFILE_POSTS" : "POSTS_SUCCESS",
+          payload: [res.data, ...posts],
+        });
         setText("");
         setImages("");
         setVisible(false);
@@ -84,7 +97,11 @@ export default function CreatePostPopup({ user, setVisible }) {
       );
       setLoading(false);
 
-      if (response === "ok") {
+      if (response.status === "ok") {
+        dispatch({
+          type: profile ? "PROFILE_POSTS" : "POSTS_SUCCESS",
+          payload: [response.data, ...posts],
+        });
         setBackground("");
         setText("");
         setVisible(false);
@@ -155,7 +172,7 @@ export default function CreatePostPopup({ user, setVisible }) {
           }}
           disabled={loading}
         >
-          {loading ? <PulseLoader color="#fff" size={5} /> : "Post"}
+          {loading ? <HashLoader color="#fff" size={15} /> : "Post"}
         </button>
       </div>
     </div>
