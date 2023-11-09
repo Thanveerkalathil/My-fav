@@ -1,12 +1,12 @@
 import { Link } from "react-router-dom";
 import "./style.css";
-import CreateComment from "./CreateComment";
-import PostMenu from "./PostMenu";
-import { Dots, Public } from "../../svg";
 import Moment from "react-moment";
+import { Dots, Public } from "../../svg";
 import ReactsPopup from "./ReactsPopup";
 import { useEffect, useState } from "react";
-import { getReacts, reactPost } from "../../functions/post";
+import CreateComment from "./CreateComment";
+import PostMenu from "./PostMenu";
+import { comment, getReacts, reactPost } from "../../functions/post";
 import Comment from "./Comment";
 export default function Post({ post, user, profile }) {
   const [visible, setVisible] = useState(false);
@@ -15,6 +15,7 @@ export default function Post({ post, user, profile }) {
   const [check, setCheck] = useState();
   const [total, setTotal] = useState(0);
   const [count, setCount] = useState(1);
+  const [checkSaved, setCheckSaved] = useState();
   const [comments, setComments] = useState([]);
   useEffect(() => {
     getPostReacts();
@@ -22,13 +23,13 @@ export default function Post({ post, user, profile }) {
   useEffect(() => {
     setComments(post?.comments);
   }, [post]);
-  console.log(comments);
 
   const getPostReacts = async () => {
     const res = await getReacts(post._id, user.token);
     setReacts(res.reacts);
     setCheck(res.check);
     setTotal(res.total);
+    setCheckSaved(res.checkSaved);
   };
   const reactHandler = async (type) => {
     reactPost(post._id, type, user.token);
@@ -255,6 +256,10 @@ export default function Post({ post, user, profile }) {
           postUserId={post.user._id}
           imagesLength={post?.images?.length}
           setShowMenu={setShowMenu}
+          postId={post._id}
+          token={user.token}
+          checkSaved={checkSaved}
+          setCheckSaved={setCheckSaved}
         />
       )}
     </div>

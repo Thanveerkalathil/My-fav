@@ -22,7 +22,7 @@ exports.getAllPosts = async (req, res) => {
         .sort({ createdAt: -1 })
         .limit(10);
     });
-    const followingPosts = await (await Promise.all(promises)).flat();
+    const followingPosts = (await Promise.all(promises)).flat();
     const userPosts = await Post.find({ user: req.user.id })
       .populate("user", "first_name last_name picture username cover")
       .populate("comments.commentBy", "first_name last_name picture username")
@@ -57,6 +57,33 @@ exports.comment = async (req, res) => {
       }
     ).populate("comments.commentBy", "picture first_name last_name username");
     res.json(newComments.comments);
+  } catch (error) {
+    return res.status(500).json({ message: error.message });
+  }
+};
+exports.savePost = async (req, res) => {
+  const postId = req.params.id;
+  const user = await User.findById(req.user.id);
+  const check = user?.savedPost.find((post) => post.post.toString() == postId);
+  if (check) {
+    await User.findByIdAndUpdate(req.user.id, {
+      $pull: {
+        savedPost: {
+          _id: check._id,
+        },
+      },
+    });
+  } else {
+    await User.findByIdAndUpdate(req.user.id, {
+      $push: {
+        savedPost: {
+          post: postId,
+          savedAt: new Date(),
+        },
+      },
+    });
+  }
+  try {
   } catch (error) {
     return res.status(500).json({ message: error.message });
   }
