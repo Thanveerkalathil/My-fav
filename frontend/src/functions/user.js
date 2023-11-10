@@ -100,10 +100,10 @@ export const unfollow = async (id, token) => {
         },
       }
     );
-    console.log(data)
+    console.log(data);
     return "ok";
   } catch (error) {
-    console.log(error.response.data.message)
+    console.log(error.response.data.message);
     return error.response.data.message;
   }
 };
@@ -154,6 +154,24 @@ export const deleteRequest = async (id, token) => {
       }
     );
     return "ok";
+  } catch (error) {
+    return error.response.data.message;
+  }
+};
+
+export const search = async (searchTerm, token) => {
+  try {
+    const { data } = await axios.post(
+      `${process.env.REACT_APP_BACKEND_URL}/search/${searchTerm}`,
+      {},
+
+      {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      }
+    );
+    return data;
   } catch (error) {
     return error.response.data.message;
   }
