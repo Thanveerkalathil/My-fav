@@ -95,7 +95,13 @@ const userSchema = mongoose.Schema(
         user: {
           type: ObjectId,
           ref: "User",
+          required: true,
+
         },
+        createdAt: {
+          type: Date,
+          required: true,
+        }
       },
     ],
     details: {
