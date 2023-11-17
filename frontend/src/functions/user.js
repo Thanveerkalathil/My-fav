@@ -211,11 +211,11 @@ export const getSearchHistory = async (token) => {
   }
 };
 
-export const removeFromSearch = async (searchUser,token) => {
+export const removeFromSearch = async (searchUser, token) => {
   try {
     const { data } = await axios.put(
       `${process.env.REACT_APP_BACKEND_URL}/removeFromSearch`,
-      {searchUser},
+      { searchUser },
       {
         headers: {
           Authorization: `Bearer ${token}`,
@@ -223,6 +223,22 @@ export const removeFromSearch = async (searchUser,token) => {
       }
     );
     return data;
+  } catch (error) {
+    return error.response.data.message;
+  }
+};
+
+export const getFriendsPageInfos = async (token) => {
+  try {
+    const { data } = await axios.get(
+      `${process.env.REACT_APP_BACKEND_URL}/getFriendsPageInfos`,
+      {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      }
+    );
+    return { status: "ok", data };
   } catch (error) {
     return error.response.data.message;
   }
