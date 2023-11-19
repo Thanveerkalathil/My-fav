@@ -20,8 +20,8 @@
   top: 56px;
   left: 360px;
   right: 0;
-
   width: calc(100% - 360px);
+  min-height: 100vh;
 }
 .friends_left_header {
   display: flex;
@@ -83,7 +83,7 @@
   }
   .friends_right {
     left: 100px;
-    width: calc(100vw - 100px);
+    width: calc(100% - 100px);
   }
   .friends_left .friends_left_header .small_circle {
     display: none;
