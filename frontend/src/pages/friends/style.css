@@ -37,6 +37,15 @@
 .active_friends {
   background: var(--bg-secondary);
 }
+.active_friends .small_circle{
+  background: #2aaa8a;
+}
+.active_friends i{
+  filter: invert(100%);
+}
+.active_friends .rArrow {
+  display: none;
+}
 .see_link {
   color: var(--fave-color);
   padding: 5px;
