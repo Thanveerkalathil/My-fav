@@ -142,7 +142,7 @@ export default function Post({ post, user, profile }) {
           <div className="post_updated_bg">
             <img src={post.user.cover} alt="" />
           </div>
-          <img src={post.images[0].url} className="post_upadated_picture" />
+          <img src={post.images[0].url} className="post_upadated_picture" alt=""/>
         </div>
       ) : (
         <div className="post_cover_wrap">
@@ -173,7 +173,7 @@ export default function Post({ post, user, profile }) {
         </div>
         <div className="to_right">
           <div className="comments_count">{comments.length} comments</div>
-          <div className="share_count">1 share</div>
+          <div className="share_count">0 share</div>
         </div>
       </div>
       <div className="post_actions">
