@@ -1,0 +1,39 @@
+.dark {
+  --bg-primary: #242526;
+  --bg-secondary: #18191a;
+  --bg-third: #3a3b3c;
+  --bg-forth: #3a3b3c;
+  --color-primary: #e4e6eb;
+  --color-secondary: #b0b3b8;
+}
+.dark .blur {
+  background: rgba(1, 1, 1, 0.53);
+}
+.dark .hover1:hover {
+  background: var(--bg-third);
+}
+/*------Header-------*/
+.dark .header_right svg {
+  fill: #fff;
+}
+.dark .all_right_circle i {
+  filter: invert(100%);
+}
+.dark .active_header {
+  background: var(--light-green-color) !important;
+}
+.dark .active_header svg {
+  fill: var(--fave-color) !important;
+}
+.dark .header_right .circle_icon:hover {
+  background: #808080;
+}
+.dark input[type="text"] {
+  color: var(--color-primary);
+}
+.dark .small_circle i,
+.dark .circle i {
+  filter: invert(100%) !important;
+}
+
+/*------Header-------*/
