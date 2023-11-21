@@ -49,7 +49,7 @@ function App() {
     }
   };
   return (
-    <div className="dark">
+    <div className="">
       {visible && (
         <CreatePostPopup
           user={user}
