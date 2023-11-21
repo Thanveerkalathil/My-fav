@@ -28,7 +28,7 @@ export default function ProfilePictureInfos({
               className="profile_circle hover1"
               onClick={() => setShow(true)}
             >
-              <div className="camera_filled_icon"></div>
+              <i className="camera_filled_icon"></i>
             </div>
           )}
         </div>
