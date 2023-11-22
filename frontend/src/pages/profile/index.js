@@ -19,6 +19,7 @@ import { useMediaQuery } from "react-responsive";
 import CreatePostPopup from "../../components/createPostPopup";
 import Skeleton, { SkeletonTheme } from "react-loading-skeleton";
 import "react-loading-skeleton/dist/skeleton.css";
+import { HashLoader } from "react-spinners";
 
 export default function Profile({ getAllPosts }) {
   const [visible, setVisible] = useState(false);
@@ -177,11 +178,32 @@ export default function Profile({ getAllPosts }) {
                             height="32px"
                             width="32px"
                             containerClassName="avatar-skeleton"
-                            style={{ transform:`translateX(${-i*7}px)`}}
+                            style={{ transform: `translateX(${-i * 7}px)` }}
                           />
                         )
                       )}
                     </div>
+                  </div>
+                </div>
+                <div className={`friendship ${!visitor && "fix"}`}>
+                  <Skeleton
+                    height="36px"
+                    width={120}
+                    containerClassName="avatar-skeleton"
+                  />
+                  <div className="flex">
+                    <Skeleton
+                      height="36px"
+                      width={120}
+                      containerClassName="avatar-skeleton"
+                    />
+                    {visitor && (
+                      <Skeleton
+                        height="36px"
+                        width={120}
+                        containerClassName="avatar-skeleton"
+                      />
+                    )}
                   </div>
                 </div>
               </div>
@@ -219,17 +241,53 @@ export default function Profile({ getAllPosts }) {
               }`}
             >
               <div className="profile_left" ref={leftSide}>
-                <Intro
-                  detailss={profile.details}
-                  visitor={visitor}
-                  setOthername={setOthername}
-                />
-                <Photos
-                  username={userName}
-                  token={user.token}
-                  photos={photos}
-                />
-                <Friends friends={profile.friends} />
+                {loading ? (
+                  <>
+                    <div className="profile_card">
+                      <div className="profile_card_header">Intro</div>
+                      <div className="sekelton_loader">
+                        <HashLoader color="#2aaa8a" />
+                      </div>
+                    </div>
+
+                    <div className="profile_card">
+                      <div className="profile_card_header">
+                        Photos
+                        <div className="profile_header_link">
+                          See all photos
+                        </div>
+                      </div>
+                      <div className="sekelton_loader">
+                        <HashLoader color="#2aaa8a" />
+                      </div>
+                    </div>
+                    <div className="profile_card">
+                      <div className="profile_card_header">
+                        Friends
+                        <div className="profile_header_link">
+                          See all Friends
+                        </div>
+                      </div>
+                      <div className="sekelton_loader">
+                        <HashLoader color="#2aaa8a" />
+                      </div>
+                    </div>
+                  </>
+                ) : (
+                  <>
+                    <Intro
+                      detailss={profile.details}
+                      visitor={visitor}
+                      setOthername={setOthername}
+                    />
+                    <Photos
+                      username={userName}
+                      token={user.token}
+                      photos={photos}
+                    />
+                    <Friends friends={profile.friends} />
+                  </>
+                )}
                 <div className="relative_fb_copyright">
                   <Link to="/">Privacy </Link>
                   <span>. </span>
@@ -252,15 +310,21 @@ export default function Profile({ getAllPosts }) {
                   <CreatePost user={user} profile setVisible={setVisible} />
                 )}
                 <GridPosts />
-                <div className="posts">
-                  {profile.posts && profile.posts.length ? (
-                    profile.posts.map((post) => (
-                      <Post post={post} user={user} key={post._id} profile />
-                    ))
-                  ) : (
-                    <div className="no_posts">No posts available</div>
-                  )}
-                </div>
+                {loading ? (
+                  <div className="sekelton_loader">
+                    <HashLoader color="#2aaa8a" />
+                  </div>
+                ) : ( 
+                  <div className="posts">
+                    {profile.posts && profile.posts.length ? (
+                      profile.posts.map((post) => (
+                        <Post post={post} user={user} key={post._id} profile />
+                      ))
+                    ) : (
+                      <div className="no_posts">No posts available</div>
+                    )}
+                  </div>
+                )}
               </div>
             </div>
           </div>
