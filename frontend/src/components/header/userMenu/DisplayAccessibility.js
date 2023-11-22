@@ -3,6 +3,10 @@ import { useDispatch, useSelector } from "react-redux";
 export default function DisplayAccessibility({ setVisible }) {
   const dispatch = useDispatch();
   const { darkTheme } = useSelector((state) => ({ ...state }));
+  const handleDarkThemeChange = (newValue) => {
+    Cookies.set("darkTheme", newValue);
+    newValue ? dispatch({ type: "DARK" }) : dispatch({ type: "LIGHT" });
+  };
 
   return (
     <div className="absolute_wrap">
@@ -38,11 +42,13 @@ export default function DisplayAccessibility({ setVisible }) {
         }}
       >
         <span>Off</span>
-        {darkTheme ? (
-          <input type="radio" name="dark" id="darkOff" />
-        ) : (
-          <input type="radio" name="dark" id="darkOff" checked />
-        )}
+        <input
+          type="radio"
+          name="dark"
+          id="darkOff"
+          checked={!darkTheme}
+          onChange={() => handleDarkThemeChange(false)}
+        />
       </label>
       <label
         htmlFor="darkOn"
@@ -53,11 +59,13 @@ export default function DisplayAccessibility({ setVisible }) {
         }}
       >
         <span>On</span>
-        {darkTheme ? (
-          <input type="radio" name="dark" id="darkOn" checked />
-        ) : (
-          <input type="radio" name="dark" id="darkOn" />
-        )}
+        <input
+          type="radio"
+          name="dark"
+          id="darkOn"
+          checked={darkTheme}
+          onChange={() => handleDarkThemeChange(true)}
+        />
       </label>
       <div className="mmenu_main">
         <div className="small_circle" style={{ width: "50px" }}>
