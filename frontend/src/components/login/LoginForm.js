@@ -18,7 +18,6 @@ export default function LoginForm({ setVisible }) {
   const navigate = useNavigate();
   const [login, setLogin] = useState(loginInfos);
   const { email, password } = login;
-  console.log(login);
   const handleLoginChange = (e) => {
     const { name, value } = e.target;
     setLogin((prev) => ({ ...prev, [name]: value }));
@@ -36,19 +35,22 @@ export default function LoginForm({ setVisible }) {
 
   const loginSubmit = async () => {
     try {
-      setLogin(true); //dout//
-      const { data } = await api.post(`/login`, {
+      const response = await api.post(`/login`, {
         email,
         password,
       });
-      dispatch({ type: "LOGIN", payload: data });
-      Cookies.set("user", JSON.stringify(data));
-      navigate("/");
+      
+      if (response && response.data) {
+        dispatch({ type: "LOGIN", payload: response.data });
+        Cookies.set("user", JSON.stringify(response.data));
+        navigate("/");
+      } 
     } catch (error) {
       setLoading(false);
-      setError(error.response.data.message);
+      setError(error.response?.data?.message || "An error occurred during login.");
     }
   };
+  
 
   return (
     <div className="login_wrap">

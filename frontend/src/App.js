@@ -15,6 +15,7 @@ import Friends from "./pages/friends";
 
 function App() {
   const { user,darkTheme } = useSelector((state) => ({ ...state }));
+
   const [visible, setVisible] = useState(false);
   const [{ loading, error, posts }, dispatch] = useReducer(postsReducer, {
     loading: false,
@@ -42,14 +43,20 @@ function App() {
         payload: data,
       });
     } catch (error) {
+      let errorMessage = "An error occurred during posts retrieval";
+  
+      if (error.response && error.response.data && error.response.data.message) {
+        errorMessage = error.response.data.message;
+      }
+  
       dispatch({
         type: "POSTS_ERROR",
-        payload: error.response.data.message,
+        payload: errorMessage,
       });
     }
   };
   return (
-    <div className={darkTheme && "dark"}>
+    <div className={darkTheme ? "dark":""}>
       {visible && (
         <CreatePostPopup
           user={user}
